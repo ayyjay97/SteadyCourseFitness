@@ -1,6 +1,8 @@
 # SteadyCourseFitness
 Steady Course Fitness is a project for CS 361 at Oregon State University. The program will showcase the use of microservices spread across a group of four different programs.
+
 Built with a modular Microservices Architecture in Python, the application functions as a "system of systems" to provide high-precision athletic tracking and planning. The program is specifically engineered to help users reach defined biometric waypoints and meet rigorous performance benchmarks.
+
 Key Capabilities
 Autonomous Goal Mapping: Leverages a specialized "Goal-to-Plan Mapper" service to analyze user biometrics and suggest optimized 15-week workout templates.
 
