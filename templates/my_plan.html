@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>My Plan</h1>
+    <p>Your custom training regimen.</p>
+    
+    <a href="{{ url_for('dashboard') }}" class="link-text" style="margin-bottom: 20px;">&larr; Back to Search</a>
+
+    {% if plan %}
+        <div class="exercise-grid">
+            {% for item in plan %}
+                <a href="{{ url_for('exercise_detail', exercise_id=item.id) }}">
+                    <div class="detail-card" style="margin-top: 0; margin-bottom: 10px; padding: 10px;">
+                        <h3 style="margin: 0; font-size: 1rem;">{{ item.name }}</h3>
+                        <p style="font-size: 0.8rem; color: #ccc;">{{ item.category }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="detail-card">
+            <p>Your plan is empty.</p>
+            <a href="{{ url_for('dashboard') }}" class="link-text">Go find exercises!</a>
+        </div>
+    {% endif %}
+{% endblock %}

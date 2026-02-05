@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>WELCOME ABOARD,<br>{{ username }}!</h1>
+    
+    <p style="margin: 20px 0;">To help calculate your training plan, please enter your stats.</p>
+    
+    <form method="POST" style="margin-top: 30px;">
+        
+        <div class="form-group">
+            <label>Current Weight (lbs)</label>
+            <input type="number" name="current_weight" placeholder="e.g. 260" required>
+        </div>
+
+        <div class="form-group">
+            <label>Goal Weight (lbs)</label>
+            <input type="number" name="goal_weight" placeholder="e.g. 225" required>
+        </div>
+        
+        <button type="submit" class="btn-primary">Save and Continue</button>
+    </form>
+    
+    <p style="font-size: 0.7rem; margin-top: 30px; opacity: 0.7;">This information is protected. We will not share or sell your biometric information.</p>
+{% endblock %}

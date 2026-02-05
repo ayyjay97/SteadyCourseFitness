@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Image Credits</h1>
+    <p style="margin-bottom: 30px; color: #ccc;">Attribution for assets used in this application.</p>
+    
+    <div class="detail-card" style="text-align: left;">
+        <h3 style="color: white; border-bottom: 1px solid #56CCF2; padding-bottom: 10px;">Photography</h3>
+        
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 15px;">
+                <strong style="color: #A7E9AF;">Squat / Bench / Cardio Images</strong><br>
+                <span style="font-size: 0.9rem; color: #ddd;">Source: Unsplash / Pexels</span>
+            </li>
+            
+            <li style="margin-bottom: 15px;">
+                <strong style="color: #A7E9AF;">Icons & Logos</strong><br>
+                <span style="font-size: 0.9rem; color: #ddd;">Source: Created using Inkscape</span>
+            </li>
+            </ul>
+    </div>
+
+    <a href="{{ url_for('dashboard') }}" class="btn-primary" style="margin-top: 20px;">Back to Dashboard</a>
+{% endblock %}

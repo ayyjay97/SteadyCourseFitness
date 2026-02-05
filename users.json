@@ -1,0 +1,39 @@
+{
+    "alexanderjones97@gmail.com": {
+        "password": "password",
+        "email": "alexanderjones97@gmail.com",
+        "goal_weight": "230",
+        "current_weight": "265",
+        "plan": [
+            2
+        ]
+    },
+    "user@email.com": {
+        "password": "password",
+        "email": "user@email.com",
+        "goal_weight": "280",
+        "current_weight": "250",
+        "plan": [
+            2
+        ]
+    },
+    "test1234@test.com": {
+        "password": "password",
+        "email": "test1234@test.com",
+        "goal_weight": "215",
+        "current_weight": "280",
+        "plan": []
+    },
+    "testuser@email.com": {
+        "password": "password",
+        "email": "testuser@email.com",
+        "first_name": "Alexander",
+        "last_name": "Jones",
+        "goal_weight": "230",
+        "current_weight": "260",
+        "plan": [
+            1,
+            2
+        ]
+    }
+}

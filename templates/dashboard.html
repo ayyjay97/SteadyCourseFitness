@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="dashboard-header">
+        <div class="username-badge">{{ full_name }}</div>
+        <a href="{{ url_for('logout') }}" class="btn-secondary">Logout</a>
+    </div>
+
+    <div class="chart-placeholder">
+        <h2 class="text-navy" style="font-size: 4rem; margin: 0; line-height: 1;">{{ lbs_to_go }}</h2>
+        
+        <p class="text-navy" style="font-weight: bold; letter-spacing: 1px; margin: 5px 0 20px 0;">POUNDS TO GO</p>
+        
+        <p class="text-navy" style="font-size: 0.9rem; margin: 0; opacity: 0.8;">Current: {{ current_weight }} lbs</p>
+    </div>
+
+    <a href="{{ url_for('update_weight') }}" class="btn-primary">Update Current Weight</a>
+    <a href="{{ url_for('my_plan') }}" class="btn-blue">View My Exercise Plan</a>
+
+    <div class="section-title-bar">Search for Exercises to add</div>
+    
+    <form action="{{ url_for('dashboard') }}" method="GET" class="search-container">
+        <input type="text" name="search_query" placeholder="Type squat, cardio, etc..." class="search-input">
+        <button type="submit" class="search-btn">Go</button>
+    </form>
+
+    <div class="exercise-grid">
+        {% for exercise in exercises %}
+            <a href="{{ url_for('exercise_detail', exercise_id=exercise.id) }}" class="exercise-card-link">
+                <img src="{{ url_for('static', filename=exercise.image) }}" class="exercise-thumb" alt="{{ exercise.name }}">
+                
+                <div class="exercise-overlay">
+                    {{ exercise.name }}
+                </div>
+            </a>
+        {% else %}
+            <p>No exercises found.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{{ url_for('credits') }}" class="btn-primary" style="margin-top: 20px;">Credits</a>
+    
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Update Status</h1>
+    <p>Log your progress to adjust your trajectory.</p>
+    
+    <form method="POST">
+        <label>New Current Weight (lbs)</label>
+        <input type="number" name="current_weight" placeholder="Enter new weight" 
+               style="text-align: center; background: #082d53; border: 2px solid #56CCF2; padding: 15px; margin-bottom: 20px;" required>
+        
+        <button type="submit" class="btn-primary">Update</button>
+    </form>
+    
+    <a href="{{ url_for('dashboard') }}" class="link-text">Cancel</a>
+{% endblock %}

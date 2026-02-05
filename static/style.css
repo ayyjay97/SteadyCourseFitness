@@ -1,0 +1,249 @@
+/* Navy Theme */
+:root {
+    --navy-bg: #001F3F;      
+    --navy-card: #082d53;    
+    --accent-green: #A7E9AF; 
+    --accent-blue: #3A6EA5;  
+    --text-white: #ffffff;
+    --input-border: #56CCF2;
+    --light-blue-box: #89CFF0; /* The color of your stats box */
+}
+
+body {
+    background-color: var(--navy-bg);
+    color: var(--text-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding-bottom: 40px; /* Space at bottom for scrolling */
+}
+
+.container {
+    max-width: 450px; 
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* --- TEXT COLORS --- */
+/* Helper class for Navy Text (used in the light blue box) */
+.text-navy {
+    color: var(--navy-bg) !important;
+}
+
+/* --- STATS BOX --- */
+.chart-placeholder {
+    background-color: var(--light-blue-box);
+    border-radius: 15px;
+    padding: 30px 20px;
+    margin-bottom: 20px;
+    /* This ensures all text inside is navy unless overridden */
+    color: var(--navy-bg); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* --- BUTTONS --- */
+/* Standardizing buttons to line up perfecty */
+.btn-primary, .btn-secondary, .btn-blue {
+    display: block;
+    width: 100%;
+    padding: 15px 0; /* Consistent height */
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    box-sizing: border-box; /* Ensures padding doesn't widen button */
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.btn-primary {
+    background-color: var(--accent-green);
+    color: var(--navy-bg);
+}
+
+.btn-blue {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #ff9999;
+    color: var(--navy-bg);
+    padding: 8px 20px;
+    width: auto; /* Logout button can be smaller */
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* --- SEARCH BAR --- */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 12px;
+    background: transparent;
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+}
+
+.search-btn {
+    background-color: #A7E9AF;
+    color: var(--navy-bg);
+    border: none;
+    border-radius: 8px;
+    padding: 0 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- EXERCISE GRID --- */
+.exercise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    
+    /* Box Constraints */
+    max-height: 500px;           /* Adjust this number to make the box taller/shorter */
+    overflow-y: auto;            /* Enables vertical scrolling */
+    
+    /* Visual Box styling */
+    padding: 10px;               /* Space inside the box so images don't touch edges */
+    border: 2px solid var(--navy-card); /* Subtle border to define the area */
+    border-radius: 12px;         /* Rounded corners */
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly darker background */
+}
+
+/* The background of the scrollbar */
+.exercise-grid::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* The track (path) */
+.exercise-grid::-webkit-scrollbar-track {
+    background: var(--navy-bg);
+    border-radius: 10px;
+}
+
+/* The handle (the moving part) */
+.exercise-grid::-webkit-scrollbar-thumb {
+    background: var(--accent-blue); /* Blue handle */
+    border-radius: 10px;
+    border: 2px solid var(--navy-bg); /* Padding effect */
+}
+
+/* The handle on hover */
+.exercise-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-green); /* Turns Mint when you grab it */
+}
+
+/* The card container */
+.exercise-card-link {
+    position: relative; /* Needed for the absolute text overlay */
+    display: block;
+    border-radius: 10px;
+    overflow: hidden; /* Clips the image corners */
+    border: 2px solid white;
+    text-decoration: none;
+}
+
+.exercise-thumb {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+/* The Text Overlay */
+.exercise-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+    color: white;
+    padding: 8px 5px;
+    font-size: 0.85rem;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+/* --- LINKS (Fix for the purple visited link) --- */
+.link-text, 
+a.link-text, 
+a.link-text:visited, 
+a.link-text:hover, 
+a.link-text:active {
+    color: #A7E9AF !important; /* Force Mint Green */
+    text-decoration: none;
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+/* --- FORM INPUTS (Fix for alignment & "Cut Border" look) --- */
+.form-group {
+    position: relative; /* This acts as the anchor for the label */
+    margin-bottom: 30px; /* Space between the input boxes */
+    width: 100%;
+}
+
+.form-group label {
+    position: absolute;
+    top: -10px;          /* Moves label UP to sit on the border line */
+    left: 15px;          /* Indent from the left */
+    background-color: var(--navy-bg); /* Same color as background to hide the border line behind text */
+    padding: 0 8px;      /* Small breathing room around text */
+    color: #fff;         /* White text */
+    font-size: 0.9rem;
+    z-index: 10;         /* Ensures label sits ON TOP of the border */
+}
+
+.form-group input {
+    width: 100%;
+    background-color: transparent; /* No white background */
+    border: 2px solid #56CCF2;     /* The Light Blue border */
+    border-radius: 12px;           /* Rounded corners */
+    padding: 15px;                 /* Space inside the box */
+    color: white;                  /* Text color when typing */
+    font-size: 1rem;
+    box-sizing: border-box;        /* Ensures padding doesn't break width */
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #A7E9AF; /* Turns Mint when typing */
+}
+
+/* --- UTILS --- */
+.ship-wheel {
+    margin: 20px auto;
+    width: 80px;
+    height: 80px;
+}
+
+.ship-wheel img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.username-badge { background: white; color: var(--navy-bg); padding: 10px 20px; border-radius: 8px; font-weight: bold; }
+.section-title-bar { background-color: var(--navy-card); padding: 10px; border-radius: 5px; margin: 20px 0; font-weight: bold; }
