@@ -1,6 +1,6 @@
 # --- Python & Compiled Files ---
 __pycache__/
-*.py[cod]
+*.pyc
 *$py.class
 
 # --- Virtual Environments ---
