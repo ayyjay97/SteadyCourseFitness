@@ -11,6 +11,8 @@
         <p class="text-navy" style="font-weight: bold; letter-spacing: 1px; margin: 5px 0 20px 0;">POUNDS TO GO</p>
         
         <p class="text-navy" style="font-size: 0.9rem; margin: 0; opacity: 0.8;">Current: {{ current_weight }} lbs</p>
+
+        <p class="text-navy" style="font-size: 0.9rem; margin: 0; opacity: 0.8;">Goal: {{ goal_weight }} lbs</p>
     </div>
 
     <a href="{{ url_for('update_weight') }}" class="btn-primary">Update Current Weight</a>

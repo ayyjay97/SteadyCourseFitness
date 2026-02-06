@@ -44,9 +44,9 @@ def goal_setup():
         return redirect(url_for('login'))
         
     if request.method == 'POST':
-        goal_weight = request.form['goal_weight']
-        current_weight = request.form['current_weight']
-        height = request.form['height']
+        goal_weight = round(float(request.form['goal_weight']), 2)
+        current_weight = round(float(request.form['current_weight']), 2)
+        height = round(float(request.form['height']), 2)
         
         auth_handler.update_user_stats(session['username'], goal_weight, current_weight, height)
         return redirect(url_for('dashboard'))
@@ -60,15 +60,13 @@ def dashboard():
     
     user_data = auth_handler.get_user_data(session['username'])
     
-    # Create the full name string
     full_name = f"{user_data.get('first_name', '')} {user_data.get('last_name', '')}"
     
-    # Calculate stats logic
-    current = int(user_data.get('current_weight') or 0)
-    goal = int(user_data.get('goal_weight') or 0)
-    lbs_to_go = current - goal
+    current = float(user_data.get('current_weight') or 0)
+    goal = float(user_data.get('goal_weight') or 0)
+    
+    lbs_to_go = round(current - goal, 2)
 
-    # Search logic
     all_exercises = data.get_all_exercises()
     query = request.args.get('search_query')
     if query:
@@ -80,7 +78,8 @@ def dashboard():
                            full_name=full_name,
                            exercises=exercises_to_show,
                            lbs_to_go=lbs_to_go,
-                           current_weight=current)
+                           current_weight=current,
+                           goal_weight=goal)
 
 @app.route('/update_weight', methods=['GET', 'POST'])
 def update_weight():
@@ -88,9 +87,14 @@ def update_weight():
         return redirect(url_for('login'))
         
     if request.method == 'POST':
-        new_weight = request.form['current_weight']
+        new_weight = round(float(request.form['current_weight']), 2)
+        
         user_data = auth_handler.get_user_data(session['username'])
-        auth_handler.update_user_stats(session['username'], user_data['goal_weight'], new_weight)
+        # Pass the existing height and goal
+        existing_height = user_data.get('height')
+        existing_goal = user_data.get('goal_weight')
+        
+        auth_handler.update_user_stats(session['username'], existing_goal, new_weight, existing_height)
         return redirect(url_for('dashboard'))
         
     return render_template('update_weight.html')
