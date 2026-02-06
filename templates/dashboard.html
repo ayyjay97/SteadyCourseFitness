@@ -2,7 +2,7 @@
 {% block content %}
     <div class="dashboard-header">
         <div class="username-badge">{{ full_name }}</div>
-        <a href="{{ url_for('logout') }}" class="btn-secondary">Logout</a>
+        <button onclick="openLogoutModal()" class="btn-secondary" style="width: auto; margin: 0; cursor: pointer;">Logout</button>
     </div>
 
     <div class="chart-placeholder">
@@ -14,12 +14,13 @@
     </div>
 
     <a href="{{ url_for('update_weight') }}" class="btn-primary">Update Current Weight</a>
-    <a href="{{ url_for('my_plan') }}" class="btn-blue">View My Exercise Plan</a>
 
-    <div class="section-title-bar">Search for Exercises to add</div>
+    <a href="{{ url_for('weight_history') }}" class="btn-blue">View Weight Progress</a>
+
+    <a href="{{ url_for('my_plan') }}" class="btn-blue">View My Exercise Plan</a>
     
     <form action="{{ url_for('dashboard') }}" method="GET" class="search-container">
-        <input type="text" name="search_query" placeholder="Type squat, cardio, etc..." class="search-input">
+        <input type="text" name="search_query" placeholder="Search for exercises to add to your plan" class="search-input">
         <button type="submit" class="search-btn">Go</button>
     </form>
 
@@ -39,4 +40,36 @@
 
     <a href="{{ url_for('credits') }}" class="btn-primary" style="margin-top: 20px;">Credits</a>
     
+    <div id="logoutModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">Leaving so soon?</h2>
+            <p style="color: #ccc;">Are you sure you want to logout?</p>
+            
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeLogoutModal()">No, Stay</button>
+    
+                <button class="btn-confirm" onclick="window.location.href='{{ url_for('logout') }}'">Yes, Logout</button>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        function openLogoutModal() {
+            // Show the modal by setting display to Flex
+            document.getElementById('logoutModal').style.display = 'flex';
+        }
+
+        function closeLogoutModal() {
+            // Hide the modal
+            document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        // Close if clicking outside the box
+        window.onclick = function(event) {
+            var modal = document.getElementById('logoutModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 {% endblock %}

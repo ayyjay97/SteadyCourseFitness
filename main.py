@@ -44,11 +44,11 @@ def goal_setup():
         return redirect(url_for('login'))
         
     if request.method == 'POST':
-        # Capture both weights
         goal_weight = request.form['goal_weight']
         current_weight = request.form['current_weight']
+        height = request.form['height']
         
-        auth_handler.update_user_stats(session['username'], goal_weight, current_weight)
+        auth_handler.update_user_stats(session['username'], goal_weight, current_weight, height)
         return redirect(url_for('dashboard'))
         
     return render_template('goal_setup.html', username=session['username'])
@@ -94,6 +94,20 @@ def update_weight():
         return redirect(url_for('dashboard'))
         
     return render_template('update_weight.html')
+
+@app.route('/weight_history')
+def weight_history():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+        
+    user_data = auth_handler.get_user_data(session['username'])
+    # Get the history list, default to empty if missing
+    history = user_data.get('weight_history', [])
+    
+    # Reverse the list so newest dates appear first
+    history = list(reversed(history))
+    
+    return render_template('weight_history.html', history=history)
 
 @app.route('/my_plan')
 def my_plan():

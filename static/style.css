@@ -6,7 +6,7 @@
     --accent-blue: #3A6EA5;  
     --text-white: #ffffff;
     --input-border: #56CCF2;
-    --light-blue-box: #89CFF0; /* The color of your stats box */
+    --light-blue-box: #89CFF0;
 }
 
 body {
@@ -27,7 +27,6 @@ body {
 }
 
 /* --- TEXT COLORS --- */
-/* Helper class for Navy Text (used in the light blue box) */
 .text-navy {
     color: var(--navy-bg) !important;
 }
@@ -48,7 +47,6 @@ body {
 }
 
 /* --- BUTTONS --- */
-/* Standardizing buttons to line up perfecty */
 .btn-primary, .btn-secondary, .btn-blue {
     display: block;
     width: 100%;
@@ -154,7 +152,7 @@ body {
 
 /* The card container */
 .exercise-card-link {
-    position: relative; /* Needed for the absolute text overlay */
+    position: relative;
     display: block;
     border-radius: 10px;
     overflow: hidden; /* Clips the image corners */
@@ -183,7 +181,7 @@ body {
     box-sizing: border-box;
 }
 
-/* --- LINKS (Fix for the purple visited link) --- */
+/* --- LINKS --- */
 .link-text, 
 a.link-text, 
 a.link-text:visited, 
@@ -198,22 +196,22 @@ a.link-text:active {
     font-size: 0.9rem;
 }
 
-/* --- FORM INPUTS (Fix for alignment & "Cut Border" look) --- */
+/* --- FORM INPUTS --- */
 .form-group {
-    position: relative; /* This acts as the anchor for the label */
+    position: relative;
     margin-bottom: 30px; /* Space between the input boxes */
     width: 100%;
 }
 
 .form-group label {
     position: absolute;
-    top: -10px;          /* Moves label UP to sit on the border line */
+    top: -10px;          /* Moves label up to sit on the border line */
     left: 15px;          /* Indent from the left */
     background-color: var(--navy-bg); /* Same color as background to hide the border line behind text */
     padding: 0 8px;      /* Small breathing room around text */
     color: #fff;         /* White text */
     font-size: 0.9rem;
-    z-index: 10;         /* Ensures label sits ON TOP of the border */
+    z-index: 10;         /* Ensures label sits on top of the border */
 }
 
 .form-group input {
@@ -230,6 +228,77 @@ a.link-text:active {
 
 .form-group input:focus {
     border-color: #A7E9AF; /* Turns Mint when typing */
+}
+
+/* --- MODAL STYLES --- */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dimmed background */
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--navy-card);
+    padding: 30px;
+    border: 2px solid var(--input-border);
+    border-radius: 15px;
+    width: 80%;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.modal-actions button {
+    flex: 1;                 /* Makes them equal width */
+    height: 50px;            /* Forces exact same height */
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 2px solid;       /* Pre-sets border width */
+}
+
+/* Style for "No, Stay" (Outline) */
+.btn-cancel {
+    background-color: transparent;
+    border-color: #56CCF2;
+    color: white;
+}
+.btn-cancel:hover {
+    background-color: rgba(86, 204, 242, 0.1);
+}
+
+/* Style for "Yes, Logout" (Solid Color) */
+.btn-confirm {
+    background-color: #ff9999;
+    border-color: #ff9999;
+    color: var(--navy-bg);
+}
+.btn-confirm:hover {
+    background-color: #ff8080;
+    border-color: #ff8080;
+}
+
+/* Animation for smooth appearance */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* --- UTILS --- */
