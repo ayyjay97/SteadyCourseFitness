@@ -1,0 +1,15 @@
+# --- Python & Compiled Files ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments ---
+venv/
+env/
+.env
+
+# --- Local User Data ---
+users.json
+
+# --- VS Code Settings ---
+.vscode/
