@@ -14,5 +14,27 @@
         
         {% block content %}{% endblock %}
     </div>
+
+    <div class="nav-container">
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+    <div class="nav-links" id="navLinks">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('running_log') }}">Running Log</a>
+        <a href="{{ url_for('pace_calculator') }}">Pace Calculator</a>
+        <a href="{{ url_for('plan_selection') }}">12-Week Plans</a>
+        <a href="{{ url_for('logout') }}" style="color: #ff9999;">Logout</a>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        var x = document.getElementById("navLinks");
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        } else {
+            x.style.display = "block";
+        }
+    }
+</script>
 </body>
 </html>

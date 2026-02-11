@@ -30,7 +30,9 @@ def register_user(email, password, first_name, last_name):
         "goal_weight": 0,
         "current_weight": 0,
         "plan": [],
-        "weight_history": []
+        "weight_history": [],
+        "run_log": [],
+        "selected_plan": None
     }
     _save_users(users)
     return True
@@ -76,3 +78,37 @@ def add_exercise_to_plan(username, exercise_id):
         if exercise_id not in users[username]["plan"]:
             users[username]["plan"].append(exercise_id)
             _save_users(users)
+
+def log_run(username, distance, time_str, date):
+    users = _load_users()
+    if username in users:
+        # Calculate pace (min/mile)
+        try:
+            # Assumes time_str is "MM:SS" or "MM"
+            parts = list(map(int, time_str.split(':')))
+            total_minutes = parts[0] + (parts[1]/60 if len(parts) > 1 else 0)
+            pace_val = total_minutes / float(distance)
+            pace_min = int(pace_val)
+            pace_sec = int((pace_val - pace_min) * 60)
+            pace_display = f"{pace_min}:{pace_sec:02d}/mi"
+        except:
+            pace_display = "N/A"
+
+        entry = {
+            "date": date,
+            "distance": distance,
+            "time": time_str,
+            "pace": pace_display
+        }
+        
+        if "run_log" not in users[username]:
+            users[username]["run_log"] = []
+            
+        users[username]["run_log"].append(entry)
+        _save_users(users)
+
+def set_user_goal_plan(username, plan_type):
+    users = _load_users()
+    if username in users:
+        users[username]["selected_plan"] = plan_type
+        _save_users(users)

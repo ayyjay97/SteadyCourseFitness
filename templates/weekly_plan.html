@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ plan.title }}</h1>
+    <a href="{{ url_for('plan_selection') }}" class="link-text">Change Plan</a>
+    
+    <div class="exercise-grid" style="display: block;">
+        {% for week in plan.weeks %}
+            <div class="detail-card" style="text-align: left; margin-bottom: 15px;">
+                <strong style="color: #A7E9AF;">Week {{ week.week }}: {{ week.focus }}</strong>
+                <p style="margin-top: 5px;">{{ week.details }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

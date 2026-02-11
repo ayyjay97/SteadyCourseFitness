@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>My Plan</h1>
+    <h1>My Saved Exercises</h1>
     <p>Your custom training regimen.</p>
     
     <a href="{{ url_for('dashboard') }}" class="link-text" style="margin-bottom: 20px;">&larr; Back to Search</a>
@@ -18,7 +18,7 @@
         </div>
     {% else %}
         <div class="detail-card">
-            <p>Your plan is empty.</p>
+            <p>You have no saved exercises.</p>
             <a href="{{ url_for('dashboard') }}" class="link-text">Go find exercises!</a>
         </div>
     {% endif %}

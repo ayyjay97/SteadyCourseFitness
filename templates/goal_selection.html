@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Choose Your Path</h1>
+    
+    <div class="detail-card">
+        <h3>Burn Fat</h3>
+        <p>High intensity cardio & circuits.</p>
+        <a href="{{ url_for('set_plan', plan_type='fat_loss') }}" class="btn-primary">Select</a>
+    </div>
+
+    <div class="detail-card">
+        <h3>Build Muscle</h3>
+        <p>Hypertrophy focused lifting.</p>
+        <a href="{{ url_for('set_plan', plan_type='build_muscle') }}" class="btn-primary">Select</a>
+    </div>
+
+    <div class="detail-card">
+        <h3>Improve Run Time</h3>
+        <p>Speed work and endurance.</p>
+        <a href="{{ url_for('set_plan', plan_type='run_time') }}" class="btn-primary">Select</a>
+    </div>
+{% endblock %}

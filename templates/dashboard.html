@@ -19,10 +19,10 @@
 
     <a href="{{ url_for('weight_history') }}" class="btn-blue">View Weight Progress</a>
 
-    <a href="{{ url_for('my_plan') }}" class="btn-blue">View My Exercise Plan</a>
+    <a href="{{ url_for('my_plan') }}" class="btn-blue">View My Saved Exercises</a>
     
     <form action="{{ url_for('dashboard') }}" method="GET" class="search-container">
-        <input type="text" name="search_query" placeholder="Search for exercises to add to your plan" class="search-input">
+        <input type="text" name="search_query" placeholder="Search for exercises to save" class="search-input">
         <button type="submit" class="search-btn">Go</button>
     </form>
 

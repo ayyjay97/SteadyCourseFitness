@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Pace Calculator</h1>
+    <form method="POST">
+        <div class="form-group"><label>Distance (Miles)</label><input type="number" step="0.01" name="distance" required></div>
+        <div class="form-group"><label>Time (Minutes)</label><input type="number" step="0.01" name="minutes" required></div>
+        <button type="submit" class="btn-blue">Calculate</button>
+    </form>
+
+    {% if result %}
+        <div class="chart-placeholder" style="margin-top:20px;">
+            <h2 class="text-navy">{{ result.pace }} / mi</h2>
+            <p class="text-navy">Est. 5k: {{ result['5k'] }}</p>
+            <p class="text-navy">Est. 10k: {{ result['10k'] }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

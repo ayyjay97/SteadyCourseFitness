@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import auth_handler
 import data
+import plans
 
 app = Flask(__name__)
 app.secret_key = "change_this_secret_key"
@@ -141,6 +142,73 @@ def add_to_plan(exercise_id):
         
     auth_handler.add_exercise_to_plan(session['username'], exercise_id)
     return redirect(url_for('my_plan'))
+
+@app.route('/running_log', methods=['GET', 'POST'])
+def running_log():
+    if 'username' not in session: return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        date = request.form['date']
+        dist = request.form['distance']
+        time = request.form['time']
+        auth_handler.log_run(session['username'], dist, time, date)
+        return redirect(url_for('running_log'))
+
+    user_data = auth_handler.get_user_data(session['username'])
+    logs = user_data.get('run_log', [])
+    return render_template('running_log.html', logs=reversed(logs))
+
+@app.route('/pace_calculator', methods=['GET', 'POST'])
+def pace_calculator():
+    if 'username' not in session: return redirect(url_for('login'))
+    
+    result = None
+    if request.method == 'POST':
+        try:
+            dist = float(request.form['distance'])
+            mins = float(request.form['minutes'])
+            pace = mins / dist
+            p_min = int(pace)
+            p_sec = int((pace - p_min) * 60)
+            
+            # Projections
+            mile_time = pace
+            k5_time = pace * 3.1
+            k10_time = pace * 6.2
+            
+            result = {
+                "pace": f"{p_min}:{p_sec:02d}",
+                "5k": f"{int(k5_time)}:{int((k5_time%1)*60):02d}",
+                "10k": f"{int(k10_time)}:{int((k10_time%1)*60):02d}"
+            }
+        except:
+            result = {"error": "Invalid Input"}
+            
+    return render_template('pace_calculator.html', result=result)
+
+@app.route('/plan_selection')
+def plan_selection():
+    if 'username' not in session: return redirect(url_for('login'))
+    return render_template('goal_selection.html')
+
+@app.route('/set_plan/<plan_type>')
+def set_plan(plan_type):
+    if 'username' not in session: return redirect(url_for('login'))
+    auth_handler.set_user_goal_plan(session['username'], plan_type)
+    return redirect(url_for('my_weekly_plan'))
+
+@app.route('/my_weekly_plan')
+def my_weekly_plan():
+    if 'username' not in session: return redirect(url_for('login'))
+    
+    user_data = auth_handler.get_user_data(session['username'])
+    plan_type = user_data.get('selected_plan')
+    
+    if not plan_type:
+        return redirect(url_for('plan_selection'))
+        
+    plan_data = plans.get_plan(plan_type)
+    return render_template('weekly_plan.html', plan=plan_data)
 
 @app.route('/credits')
 def credits():

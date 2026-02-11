@@ -316,3 +316,54 @@ a.link-text:active {
 .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .username-badge { background: white; color: var(--navy-bg); padding: 10px 20px; border-radius: 8px; font-weight: bold; }
 .section-title-bar { background-color: var(--navy-card); padding: 10px; border-radius: 5px; margin: 20px 0; font-weight: bold; }
+
+/* --- HAMBURGER MENU --- */
+.nav-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.menu-icon {
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--accent-green);
+    user-select: none;
+}
+
+.nav-links {
+    display: none; /* Hidden by default */
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background-color: var(--navy-card);
+    border: 2px solid var(--input-border);
+    border-radius: 10px;
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.nav-links a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: right;
+}
+
+.nav-links a:hover {
+    color: var(--accent-green);
+}
+
+/* --- RUN LOG TABLE --- */
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+.log-table th { text-align: left; color: var(--accent-green); border-bottom: 1px solid white; padding: 5px;}
+.log-table td { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
