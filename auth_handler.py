@@ -112,3 +112,22 @@ def set_user_goal_plan(username, plan_type):
     if username in users:
         users[username]["selected_plan"] = plan_type
         _save_users(users)
+
+def toggle_workout_completion(username, plan_type, week_num, day_num):
+    users = _load_users()
+    if username in users:
+        # Create a unique ID for this specific workout
+        # e.g. "fat_loss_w1_d1"
+        workout_id = f"{plan_type}_w{week_num}_d{day_num}"
+        
+        if "completed_workouts" not in users[username]:
+            users[username]["completed_workouts"] = []
+            
+        completed_list = users[username]["completed_workouts"]
+        
+        if workout_id in completed_list:
+            completed_list.remove(workout_id) # Uncheck
+        else:
+            completed_list.append(workout_id) # Check
+            
+        _save_users(users)

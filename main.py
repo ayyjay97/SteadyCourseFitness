@@ -2,9 +2,42 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import auth_handler
 import data
 import plans
+import requests 
 
 app = Flask(__name__)
 app.secret_key = "change_this_secret_key"
+
+# --- HELPER FUNCTION FOR MICROSERVICE ---
+def get_goal_distance(current_val, goal_val):
+    """
+    Calls the Goal Calculator Microservice to get the distance between two numbers.
+    """
+    # URL of the microservice (running locally on port 5001)
+    microservice_url = "http://localhost:5001/calculate"
+
+    # Prepare the parameters to send
+    params = {
+        "current": current_val,
+        "goal": goal_val
+    }
+
+    try:
+        # Send the GET request with a short timeout
+        response = requests.get(microservice_url, params=params, timeout=2)
+
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("distance")
+        else:
+            print(f"Microservice Error: Status {response.status_code}")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"Microservice Connection Failed: {e}")
+        return None
+
+
+# --- CORE ROUTES ---
 
 @app.route('/')
 def root():
@@ -66,7 +99,12 @@ def dashboard():
     current = float(user_data.get('current_weight') or 0)
     goal = float(user_data.get('goal_weight') or 0)
     
-    lbs_to_go = round(current - goal, 2)
+    # Call Microservice
+    lbs_to_go = get_goal_distance(current, goal)
+
+    # Fallback if microservice is down
+    if lbs_to_go is None:
+        lbs_to_go = round(abs(current - goal), 2)
 
     all_exercises = data.get_all_exercises()
     query = request.args.get('search_query')
@@ -89,9 +127,7 @@ def update_weight():
         
     if request.method == 'POST':
         new_weight = round(float(request.form['current_weight']), 2)
-        
         user_data = auth_handler.get_user_data(session['username'])
-        # Pass the existing height and goal
         existing_height = user_data.get('height')
         existing_goal = user_data.get('goal_weight')
         
@@ -106,12 +142,8 @@ def weight_history():
         return redirect(url_for('login'))
         
     user_data = auth_handler.get_user_data(session['username'])
-    # Get the history list, default to empty if missing
     history = user_data.get('weight_history', [])
-    
-    # Reverse the list so newest dates appear first
     history = list(reversed(history))
-    
     return render_template('weight_history.html', history=history)
 
 @app.route('/my_plan')
@@ -121,17 +153,13 @@ def my_plan():
         
     user_data = auth_handler.get_user_data(session['username'])
     plan_ids = user_data.get('plan', [])
-    
-    # Convert IDs back to full exercise objects
     saved_exercises = [data.get_exercise_by_id(pid) for pid in plan_ids]
-    
     return render_template('my_plan.html', plan=saved_exercises)
 
 @app.route('/exercise/<int:exercise_id>')
 def exercise_detail(exercise_id):
     if 'username' not in session:
         return redirect(url_for('login'))
-    
     exercise = data.get_exercise_by_id(exercise_id)
     return render_template('exercise_detail.html', exercise=exercise)
 
@@ -139,9 +167,10 @@ def exercise_detail(exercise_id):
 def add_to_plan(exercise_id):
     if 'username' not in session:
         return redirect(url_for('login'))
-        
     auth_handler.add_exercise_to_plan(session['username'], exercise_id)
     return redirect(url_for('my_plan'))
+
+# --- NEW FEATURE ROUTES ---
 
 @app.route('/running_log', methods=['GET', 'POST'])
 def running_log():
@@ -171,8 +200,6 @@ def pace_calculator():
             p_min = int(pace)
             p_sec = int((pace - p_min) * 60)
             
-            # Projections
-            mile_time = pace
             k5_time = pace * 3.1
             k10_time = pace * 6.2
             
@@ -197,6 +224,18 @@ def set_plan(plan_type):
     auth_handler.set_user_goal_plan(session['username'], plan_type)
     return redirect(url_for('my_weekly_plan'))
 
+@app.route('/toggle_day/<int:week>/<int:day>')
+def toggle_day(week, day):
+    if 'username' not in session: return redirect(url_for('login'))
+    
+    user_data = auth_handler.get_user_data(session['username'])
+    plan_type = user_data.get('selected_plan')
+    
+    if plan_type:
+        auth_handler.toggle_workout_completion(session['username'], plan_type, week, day)
+        
+    return redirect(url_for('my_weekly_plan'))
+
 @app.route('/my_weekly_plan')
 def my_weekly_plan():
     if 'username' not in session: return redirect(url_for('login'))
@@ -208,7 +247,12 @@ def my_weekly_plan():
         return redirect(url_for('plan_selection'))
         
     plan_data = plans.get_plan(plan_type)
-    return render_template('weekly_plan.html', plan=plan_data)
+    completed_ids = user_data.get('completed_workouts', [])
+    
+    return render_template('weekly_plan.html', 
+                           plan=plan_data, 
+                           plan_type=plan_type, 
+                           completed_ids=completed_ids)
 
 @app.route('/credits')
 def credits():
