@@ -13,6 +13,13 @@
         <p class="text-navy" style="font-size: 0.9rem; margin: 0; opacity: 0.8;">Current: {{ current_weight }} lbs</p>
 
         <p class="text-navy" style="font-size: 0.9rem; margin: 0; opacity: 0.8;">Goal: {{ goal_weight }} lbs</p>
+        
+        {% if bmi_value %}
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 31, 63, 0.2); width: 100%;">
+            <p class="text-navy" style="font-size: 1.2rem; margin: 0; font-weight: bold;">BMI: {{ bmi_value }}</p>
+            <p class="text-navy" style="font-size: 0.9rem; margin: 0;">Category: {{ bmi_category }}</p>
+        </div>
+        {% endif %}
     </div>
 
     <a href="{{ url_for('update_weight') }}" class="btn-primary">Update Current Weight</a>

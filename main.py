@@ -21,12 +21,16 @@ def get_goal_distance(current_val, goal_val):
         "goal": goal_val
     }
 
+    print(f"\n[DEBUG] Requesting calculation from microservice...")
+    print(f"[DEBUG] Sent Params: {params}")
+
     try:
         # Send the GET request with a short timeout
         response = requests.get(microservice_url, params=params, timeout=2)
 
         if response.status_code == 200:
             data = response.json()
+            print(f"[DEBUG] Received JSON: {data}")
             return data.get("distance")
         else:
             print(f"Microservice Error: Status {response.status_code}")
@@ -35,6 +39,33 @@ def get_goal_distance(current_val, goal_val):
     except requests.exceptions.RequestException as e:
         print(f"Microservice Connection Failed: {e}")
         return None
+
+def get_bmi_data(weight, height):
+    """
+    Calls the BMI Calculator Microservice to get BMI and Category.
+    """
+    if not weight or not height or height <= 0:
+        return None, None
+
+    # Running on 5002 to avoid port conflicts
+    microservice_url = "http://localhost:5002/calculate_bmi"
+    
+    payload = {
+        "weight_lbs": weight,
+        "height_inches": height
+    }
+
+    try:
+        response = requests.post(microservice_url, json=payload, timeout=2)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("bmi"), data.get("category")
+        else:
+            print(f"BMI Microservice Error: Status {response.status_code}")
+            return None, None
+    except requests.exceptions.RequestException as e:
+        print(f"BMI Microservice Connection Failed: {e}")
+        return None, None
 
 
 # --- CORE ROUTES ---
@@ -98,13 +129,17 @@ def dashboard():
     
     current = float(user_data.get('current_weight') or 0)
     goal = float(user_data.get('goal_weight') or 0)
+    height = float(user_data.get('height') or 0) # Extract height
     
-    # Call Microservice
+    # Call Microservice for goal distance
     lbs_to_go = get_goal_distance(current, goal)
 
     # Fallback if microservice is down
     if lbs_to_go is None:
         lbs_to_go = round(abs(current - goal), 2)
+
+    # Call BMI Microservice
+    bmi_value, bmi_category = get_bmi_data(current, height)
 
     all_exercises = data.get_all_exercises()
     query = request.args.get('search_query')
@@ -118,7 +153,9 @@ def dashboard():
                            exercises=exercises_to_show,
                            lbs_to_go=lbs_to_go,
                            current_weight=current,
-                           goal_weight=goal)
+                           goal_weight=goal,
+                           bmi_value=bmi_value,
+                           bmi_category=bmi_category)
 
 @app.route('/update_weight', methods=['GET', 'POST'])
 def update_weight():
