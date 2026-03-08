@@ -67,7 +67,23 @@ def get_bmi_data(weight, height):
         print(f"BMI Microservice Connection Failed: {e}")
         return None, None
 
-
+def get_motivational_quote():
+    """
+    Calls the Motivational Quote Microservice.
+    """
+    microservice_url = "http://localhost:5003/get_quote"
+    
+    try:
+        response = requests.get(microservice_url, timeout=2)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("quote"), data.get("author")
+        else:
+            return None, None
+    except requests.exceptions.RequestException as e:
+        print(f"Quote Microservice Connection Failed: {e}")
+        return None, None
+    
 # --- CORE ROUTES ---
 
 @app.route('/')
@@ -141,6 +157,9 @@ def dashboard():
     # Call BMI Microservice
     bmi_value, bmi_category = get_bmi_data(current, height)
 
+    # Call Quote Microservice
+    quote_text, quote_author = get_motivational_quote()
+
     all_exercises = data.get_all_exercises()
     query = request.args.get('search_query')
     if query:
@@ -155,7 +174,9 @@ def dashboard():
                            current_weight=current,
                            goal_weight=goal,
                            bmi_value=bmi_value,
-                           bmi_category=bmi_category)
+                           bmi_category=bmi_category,
+                           quote_text=quote_text,
+                           quote_author=quote_author)
 
 @app.route('/update_weight', methods=['GET', 'POST'])
 def update_weight():

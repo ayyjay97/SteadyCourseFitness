@@ -31,19 +31,77 @@ body {
     color: var(--navy-bg) !important;
 }
 
-/* --- STATS BOX --- */
-.chart-placeholder {
-    background-color: var(--light-blue-box);
-    border-radius: 15px;
-    padding: 30px 20px;
-    margin-bottom: 20px;
-    /* This ensures all text inside is navy unless overridden */
-    color: var(--navy-bg); 
+/* --- STATS GRID --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background-color: var(--navy-card);
+    border: 2px solid var(--input-border);
+    border-radius: 12px;
+    padding: 20px 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Full-width cards */
+.stat-card.full-width {
+    grid-column: span 2;
+}
+
+/* Specific styling for the Hero (Pounds to Go) card */
+.stat-card.hero {
+    background-color: var(--light-blue-box);
+    border: none;
+    padding: 30px 20px;
+}
+
+/* Specific styling for the Motivational Quote card */
+.stat-card.quote {
+    border-color: var(--accent-green);
+    padding: 15px;
+}
+
+/* Typography for the stats */
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin: 5px 0;
+    line-height: 1;
+    color: white;
+}
+
+.hero .stat-value {
+    font-size: 4rem;
+    color: var(--navy-bg);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    opacity: 0.9;
+    margin: 0;
+    color: var(--accent-blue);
+}
+
+.hero .stat-label {
+    color: var(--navy-bg);
+}
+
+.stat-subtext {
+    font-size: 0.85rem;
+    margin: 5px 0 0 0;
+    opacity: 0.8;
 }
 
 /* --- BUTTONS --- */
