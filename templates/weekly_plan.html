@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>{{ plan.title }}</h1>
-    <a href="{{ url_for('plan_selection') }}" class="link-text">Change Plan</a>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <a href="{{ url_for('plan_selection') }}" class="link-text">Change Plan</a>
+        <button id="export-pdf-btn" style="padding: 8px 16px; background-color: #A7E9AF; color: #1a1a2e; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+            Download Plan as PDF
+        </button>
+    </div>
     
     <div class="exercise-grid" style="display: block;">
         {% for week in plan.weeks %}
@@ -11,4 +17,106 @@
             </div>
         {% endfor %}
     </div>
+
+    <script>
+        document.getElementById('export-pdf-btn').addEventListener('click', async (e) => {
+            e.preventDefault(); 
+            
+            const btn = document.getElementById('export-pdf-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Generating Document...";
+
+            // 1. Construct a clean, structured document using the text data
+            const planTitle = "{{ plan.title }}";
+            let cleanHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { 
+                            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+                            line-height: 1.6; 
+                            padding: 40px; 
+                            color: #333333; 
+                        }
+                        h1 { 
+                            color: #2c3e50; 
+                            text-align: center; 
+                            border-bottom: 2px solid #bdc3c7; 
+                            padding-bottom: 10px; 
+                            margin-bottom: 30px;
+                        }
+                        .week-container {
+                            margin-bottom: 20px;
+                            padding: 15px;
+                            background-color: #f9f9f9;
+                            border-left: 4px solid #27ae60;
+                        }
+                        h3 { 
+                            color: #27ae60; 
+                            margin-top: 0; 
+                            margin-bottom: 8px; 
+                            font-size: 1.2rem;
+                        }
+                        p { 
+                            margin: 0; 
+                            color: #555555;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>${planTitle}</h1>
+            `;
+
+            // 2. Safely inject the text data for each week
+            {% for week in plan.weeks %}
+                cleanHtml += `
+                    <div class="week-container">
+                        <h3>Week {{ week.week }}: {{ week.focus|safe }}</h3>
+                        <p>{{ week.details|safe }}</p>
+                    </div>
+                `;
+            {% endfor %}
+
+            cleanHtml += `</body></html>`;
+
+            try {
+                // 3. Send the clean text layout to the microservice
+                const response = await fetch('http://localhost:8000/api/v1/export', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/pdf'
+                    },
+                    body: JSON.stringify({ 
+                        url: "about:blank", 
+                        html: cleanHtml 
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+
+                // 4. Download the generated file
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = planTitle.replace(/\\s+/g, '_') + '.pdf';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(downloadUrl);
+
+            } catch (error) {
+                console.error('Error exporting PDF:', error);
+                alert('Could not export PDF. Please ensure the FastAPI microservice is running on port 8000.');
+            } finally {
+                btn.innerText = originalText;
+            }
+        });
+    </script>
 {% endblock %}

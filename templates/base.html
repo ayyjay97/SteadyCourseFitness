@@ -16,80 +16,24 @@
     </div>
 
     <div class="nav-container">
-    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-    <div class="nav-links" id="navLinks">
-        <a href="{{ url_for('dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('running_log') }}">Running Log</a>
-        <a href="{{ url_for('pace_calculator') }}">Pace Calculator</a>
-        <a href="{{ url_for('plan_selection') }}">12-Week Plans</a>
-        <a href="#" id="export-pdf-btn">Save as PDF</a>
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+        <div class="nav-links" id="navLinks">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('running_log') }}">Running Log</a>
+            <a href="{{ url_for('pace_calculator') }}">Pace Calculator</a>
+            <a href="{{ url_for('plan_selection') }}">12-Week Plans</a>
+        </div>
     </div>
-</div>
 
-<script>
-    function toggleMenu() {
-        var x = document.getElementById("navLinks");
-        if (x.style.display === "block") {
-            x.style.display = "none";
-        } else {
-            x.style.display = "block";
-        }
-    }
-
-// PDF Export Logic
-        document.getElementById('export-pdf-btn').addEventListener('click', async (e) => {
-            e.preventDefault(); 
-            
-            // Hide the dropdown menu so it doesn't appear in the final PDF
-            document.getElementById("navLinks").style.display = "none";
-            
-            const btn = document.getElementById('export-pdf-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "Generating PDF...";
-
-            try {
-                // Grab the absolute URL and the entire HTML of the current page
-                const currentUrl = window.location.href;
-                const pageHtml = document.documentElement.outerHTML;
-                
-                // Send it to your FastAPI Microservice
-                const response = await fetch('http://localhost:8000/api/v1/export', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/pdf'
-                    },
-                    body: JSON.stringify({ 
-                        url: currentUrl,
-                        html: pageHtml 
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to generate PDF');
-                }
-
-                // Convert response to a downloadable file
-                const blob = await response.blob();
-                const downloadUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = downloadUrl;
-                
-                // Name the file dynamically based on the page title
-                link.download = document.title.replace(/\s+/g, '_') + '.pdf';
-                
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(downloadUrl);
-
-            } catch (error) {
-                console.error('Error exporting PDF:', error);
-                alert('Could not export PDF. Make sure your FastAPI microservice is running on port 8000.');
-            } finally {
-                btn.innerText = originalText;
+    <script>
+        function toggleMenu() {
+            var x = document.getElementById("navLinks");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
             }
-        });
-</script>
+        }
+    </script>
 </body>
 </html>
